@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Editor from './components/Editor'
 import Sidebar from './components/Sidebar'
 import { data } from "./data"
@@ -6,10 +6,17 @@ import Split from "react-split"
 import {nanoid} from "nanoid"
 
 const App = () => {
-  const [notes, setNotes] = React.useState([])
-  const [currentNoteId, setCurrentNoteId] = React.useState(
+  const [notes, setNotes] = useState(
+    () => JSON.parse(localStorage.getItem('notes')) || 
+    []
+)
+  const [currentNoteId, setCurrentNoteId] = useState(
       (notes[0] && notes[0].id) || ""
   )
+
+  useEffect(() => {
+    localStorage.setItem('notes', JSON.stringify(notes))
+  }, [notes])
   
   function createNewNote() {
       const newNote = {
